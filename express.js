@@ -6,19 +6,17 @@ const {ExpressError} = require('./expressClasses')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.get('/mean', (res, req, next) => {
+app.get('/mean', (req, res, next) => {
     try {
-        console.log('req.query.nums', req.query.nums)
         if (!req.query.nums) {
             next()
         }
 
         nums = checkValuesAreNums(req.query.nums.split(','))
-
         // Is there a better way to configure Error handing? Can I throw an error 
         // in my helper file so that my error handling is not as repetitious in each route?
-        if (nums[0] === NaN) { 
-            throw new ExpressError(`${nums[1]} is not a number`)
+        if (!nums[0]) { 
+            throw new ExpressError(`${nums[1]} is not a number`, 400)
         } else {
             const result = callOperationOnNums(nums, mean)
             return res.json(result)
@@ -28,7 +26,7 @@ app.get('/mean', (res, req, next) => {
     }
 })
 
-app.get('/median', (res, req, next) => {
+app.get('/median', (req, res, next) => {
     try {
         if (!req.query.nums) {
             next()
@@ -36,8 +34,8 @@ app.get('/median', (res, req, next) => {
 
         nums = checkValuesAreNums(req.query.nums.split(','))
 
-        if (nums[0] === NaN) { 
-            throw new ExpressError(`${nums[1]} is not a number`)
+        if (!nums[0]) { 
+            throw new ExpressError(`${nums[1]} is not a number`, 400)
         } else {
             const result = callOperationOnNums(nums, median)
             return res.json(result)
@@ -47,7 +45,7 @@ app.get('/median', (res, req, next) => {
     }
 })
 
-app.get('/mode', (res, req, next) => {
+app.get('/mode', (req, res, next) => {
     try {
         if (!req.query.nums) {
             next()
@@ -55,8 +53,8 @@ app.get('/mode', (res, req, next) => {
 
         nums = checkValuesAreNums(req.query.nums.split(','))
 
-        if (nums[0] === NaN) { 
-            throw new ExpressError(`${nums[1]} is not a number`)
+        if (!nums[0]) { 
+            throw new ExpressError(`${nums[1]} is not a number`, 400)
         } else {
             const result = callOperationOnNums(nums, mode)
             return res.json(result)
@@ -67,7 +65,7 @@ app.get('/mode', (res, req, next) => {
 })
 
 app.use(function(req, res, next) {
-    const notFoundError = new ExpressError('Not Found', 404)
+    const notFoundError = new ExpressError('nums are required', 400)
     return next(notFoundError)
 })
 

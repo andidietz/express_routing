@@ -27,6 +27,7 @@ function mode() {
     })
 
     let result = []
+    console.log('', )
     let max = 0
 
     for(let key in instanceOfNumCount) {
@@ -37,11 +38,14 @@ function mode() {
             result.push(key)
         }
     }
+    console.log('result', result)
+    console.log('lengths', Object.keys(instanceOfNumCount).length, result.length)
 
-    if (Object.keys(instanceOfNumCount).length === result.length) {
-        result = []
+    if (result.length > 1) {
+        return 'No Mode'
     }
-    return result
+
+    return parseInt(result[0])
 }
 
 function callOperationOnNums(nums, operation) {
@@ -56,7 +60,7 @@ function checkValuesAreNums(valuesAsStrings) {
         let value = Number(valuesAsStrings[i])
 
         if (Number.isNaN(value)) {
-            return [NaN, value]
+            return [NaN, valuesAsStrings[i]]
         } else {
             result.push(value)
         }
@@ -79,5 +83,4 @@ module.exports = {
     mode: mode,
     callOperationOnNums: callOperationOnNums,
     checkValuesAreNums: checkValuesAreNums,
-    ExpressError: ExpressError
 }
